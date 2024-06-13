@@ -5,9 +5,21 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+
+
 
 
 @RestController
@@ -26,5 +38,36 @@ public class NotesController {
         List<NotesModel> notes = notesService.getAllNotes();
         return new ResponseEntity<>(notes, HttpStatus.OK);
     }
+
+    @PostMapping("/notes")
+    public ResponseEntity<NotesModel> addNote(@RequestBody NotesDTO notesDTO) {
+        System.out.println(notesDTO);
+        NotesModel note = notesService.addNote(notesDTO);
+        return new ResponseEntity<>(note, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/notes/{id}")
+    public ResponseEntity<NotesModel> getNote(@PathVariable Integer id) {
+        NotesModel note = notesService.getNoteById(id);
+        return new ResponseEntity<>(note, HttpStatus.OK);
+    }
     
+
+    @PutMapping("/notes/{id}")
+    public ResponseEntity<NotesModel> updateNote(@PathVariable Integer id, @RequestBody @Valid NotesDTO notesDTO) {
+        NotesModel note = notesService.updateNoteById(id, notesDTO);
+        return new ResponseEntity<>(note, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/notes/{id}")
+    public ResponseEntity<String> deleteNote(@PathVariable Integer id) {
+        notesService.deleteNoteById(id);
+        return new ResponseEntity<>("Note deleted successfully!!!", HttpStatus.OK);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleResourceNotFound(ResourceNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
 }
