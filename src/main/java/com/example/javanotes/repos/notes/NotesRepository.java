@@ -11,5 +11,4 @@ import com.example.javanotes.entities.notes.NotesEntity;
  */
 @Repository
 public interface NotesRepository extends JpaRepository<NotesEntity, Integer> {
-
 }

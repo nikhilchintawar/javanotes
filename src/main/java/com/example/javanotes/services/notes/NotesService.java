@@ -8,19 +8,29 @@ import org.springframework.stereotype.Service;
 
 import com.example.javanotes.dtos.notes.NotesDTO;
 import com.example.javanotes.entities.notes.NotesEntity;
+import com.example.javanotes.entities.users.UsersEntity;
 import com.example.javanotes.exceptions.ResourceNotFoundException;
 import com.example.javanotes.interfaces.notes.NotesServiceInterface;
 import com.example.javanotes.repos.notes.NotesRepository;
+import com.example.javanotes.repos.users.UsersRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 
 
 @Service
 public class NotesService implements NotesServiceInterface {
     private NotesRepository notesRepository;
+    private UsersRepository usersRepository;
 
 
     @Autowired
     public void setNotesRepository(NotesRepository notesRepository) {
         this.notesRepository = notesRepository;
+    }
+
+    @Autowired
+    public void setUsersRepository(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
     }
 
     @Override
@@ -34,6 +44,10 @@ public class NotesService implements NotesServiceInterface {
         NotesEntity note = new NotesEntity();
         note.setTitle(notesDTO.getTitle());
         note.setDescription(notesDTO.getDescription());
+                // Fetch the UsersEntity using the user ID from NotesDTO
+        UsersEntity user = usersRepository.findById(notesDTO.getUser_id())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + notesDTO.getUser_id()));
+        note.setUser(user);
         return notesRepository.save(note);
     }
 

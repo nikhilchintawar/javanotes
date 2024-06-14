@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,9 +21,6 @@ import com.example.javanotes.exceptions.ResourceNotFoundException;
 import com.example.javanotes.services.notes.NotesService;
 
 import jakarta.validation.Valid;
-
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 
 
@@ -45,8 +44,7 @@ public class NotesController {
     }
 
     @PostMapping("/notes")
-    public ResponseEntity<NotesEntity> addNote(@RequestBody NotesDTO notesDTO) {
-        System.out.println(notesDTO);
+    public ResponseEntity<NotesEntity> addNote(@Valid @RequestBody NotesDTO notesDTO) {
         NotesEntity note = notesService.addNote(notesDTO);
         return new ResponseEntity<>(note, HttpStatus.CREATED);
     }
@@ -59,7 +57,7 @@ public class NotesController {
     
 
     @PutMapping("/notes/{id}")
-    public ResponseEntity<NotesEntity> updateNote(@PathVariable Integer id, @RequestBody @Valid NotesDTO notesDTO) {
+    public ResponseEntity<NotesEntity> updateNote(@Valid @PathVariable Integer id, @RequestBody @Valid NotesDTO notesDTO) {
         NotesEntity note = notesService.updateNoteById(id, notesDTO);
         return new ResponseEntity<>(note, HttpStatus.OK);
     }
