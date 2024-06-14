@@ -1,10 +1,16 @@
-package com.example.javanotes.notes;
+package com.example.javanotes.services.notes;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.javanotes.dtos.notes.NotesDTO;
+import com.example.javanotes.entities.notes.NotesEntity;
+import com.example.javanotes.exceptions.ResourceNotFoundException;
+import com.example.javanotes.interfaces.notes.NotesServiceInterface;
+import com.example.javanotes.repos.notes.NotesRepository;
 
 
 @Service
@@ -18,28 +24,28 @@ public class NotesService implements NotesServiceInterface {
     }
 
     @Override
-    public List<NotesModel> getAllNotes(){
-        List<NotesModel> notes = notesRepository.findAll();
+    public List<NotesEntity> getAllNotes(){
+        List<NotesEntity> notes = notesRepository.findAll();
         return notes;
     }
 
     @Override
-    public NotesModel addNote(NotesDTO notesDTO){
-        NotesModel note = new NotesModel();
+    public NotesEntity addNote(NotesDTO notesDTO){
+        NotesEntity note = new NotesEntity();
         note.setTitle(notesDTO.getTitle());
         note.setDescription(notesDTO.getDescription());
         return notesRepository.save(note);
     }
 
     @Override
-    public NotesModel getNoteById(Integer id){
-        Optional<NotesModel> note = notesRepository.findById(id);
+    public NotesEntity getNoteById(Integer id){
+        Optional<NotesEntity> note = notesRepository.findById(id);
         return note.orElseThrow(() -> new ResourceNotFoundException("Note not found with id " + id));
     }
 
     @Override
-    public NotesModel updateNoteById(Integer id, NotesDTO notesDTO){
-        NotesModel note = getNoteById(id);
+    public NotesEntity updateNoteById(Integer id, NotesDTO notesDTO){
+        NotesEntity note = getNoteById(id);
         note.setTitle(notesDTO.getTitle());
         note.setDescription(notesDTO.getDescription());
         notesRepository.save(note);
@@ -48,7 +54,7 @@ public class NotesService implements NotesServiceInterface {
 
     @Override
     public void deleteNoteById(Integer id){
-        NotesModel note = getNoteById(id);
+        NotesEntity note = getNoteById(id);
         notesRepository.delete(note);
     }
 

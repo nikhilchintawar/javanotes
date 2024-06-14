@@ -3,18 +3,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package com.example.javanotes.notes;
+package com.example.javanotes.interfaces.notes;
 
 import java.util.List;
+
+import com.example.javanotes.dtos.notes.NotesDTO;
+import com.example.javanotes.entities.notes.NotesEntity;
 
 /**
  *
  * @author nikhilchintawar
  */
 public interface NotesServiceInterface {
-    NotesModel addNote(NotesDTO notesDTO);
-    List<NotesModel> getAllNotes();
-    NotesModel getNoteById(Integer id);
-    NotesModel updateNoteById(Integer id, NotesDTO notesDTO);
+    NotesEntity addNote(NotesDTO notesDTO);
+    List<NotesEntity> getAllNotes();
+    NotesEntity getNoteById(Integer id);
+    NotesEntity updateNoteById(Integer id, NotesDTO notesDTO);
     void deleteNoteById(Integer id);
 }

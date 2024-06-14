@@ -1,4 +1,4 @@
-package com.example.javanotes.notes;
+package com.example.javanotes.dtos.notes;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Size;
