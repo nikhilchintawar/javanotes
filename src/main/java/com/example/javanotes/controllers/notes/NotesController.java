@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.javanotes.dtos.notes.NotesDTO;
+import com.example.javanotes.dtos.notes.NotesRequestDTO;
+import com.example.javanotes.dtos.notes.NotesResponseDTO;
 import com.example.javanotes.entities.notes.NotesEntity;
 import com.example.javanotes.exceptions.ResourceNotFoundException;
 import com.example.javanotes.services.notes.NotesService;
@@ -38,14 +40,14 @@ public class NotesController {
     }
 
     @GetMapping("/notes")
-    public ResponseEntity<List<NotesEntity>> getAllNotes() {
-        List<NotesEntity> notes = notesService.getAllNotes();
+    public ResponseEntity<List<NotesResponseDTO>> getAllNotes(@RequestParam Integer user_id) {
+        List<NotesResponseDTO> notes = notesService.getAllNotes(user_id);
         return new ResponseEntity<>(notes, HttpStatus.OK);
     }
 
     @PostMapping("/notes")
-    public ResponseEntity<NotesEntity> addNote(@Valid @RequestBody NotesDTO notesDTO) {
-        NotesEntity note = notesService.addNote(notesDTO);
+    public ResponseEntity<NotesResponseDTO> addNote(@Valid @RequestBody NotesRequestDTO notesDTO) {
+        NotesResponseDTO note = notesService.addNote(notesDTO);
         return new ResponseEntity<>(note, HttpStatus.CREATED);
     }
 
@@ -57,8 +59,8 @@ public class NotesController {
     
 
     @PutMapping("/notes/{id}")
-    public ResponseEntity<NotesEntity> updateNote(@Valid @PathVariable Integer id, @RequestBody @Valid NotesDTO notesDTO) {
-        NotesEntity note = notesService.updateNoteById(id, notesDTO);
+    public ResponseEntity<NotesResponseDTO> updateNote(@Valid @PathVariable Integer id, @RequestBody @Valid NotesRequestDTO notesDTO) {
+        NotesResponseDTO note = notesService.updateNoteById(id, notesDTO);
         return new ResponseEntity<>(note, HttpStatus.OK);
     }
 

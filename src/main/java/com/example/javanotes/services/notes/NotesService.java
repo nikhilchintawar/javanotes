@@ -2,11 +2,13 @@ package com.example.javanotes.services.notes;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.javanotes.dtos.notes.NotesDTO;
+import com.example.javanotes.dtos.notes.NotesRequestDTO;
+import com.example.javanotes.dtos.notes.NotesResponseDTO;
 import com.example.javanotes.entities.notes.NotesEntity;
 import com.example.javanotes.entities.users.UsersEntity;
 import com.example.javanotes.exceptions.ResourceNotFoundException;
@@ -34,13 +36,14 @@ public class NotesService implements NotesServiceInterface {
     }
 
     @Override
-    public List<NotesEntity> getAllNotes(){
-        List<NotesEntity> notes = notesRepository.findAll();
-        return notes;
+    public List<NotesResponseDTO> getAllNotes(Integer user_id){
+        List<NotesEntity> notes = notesRepository.findAllByUserId(user_id);
+        List<NotesResponseDTO> res = notes.stream().map(note -> convertToNotesResponseDTO(note.getTitle(), note.getDescription())).collect(Collectors.toList());
+        return res;
     }
 
     @Override
-    public NotesEntity addNote(NotesDTO notesDTO){
+    public NotesResponseDTO addNote(NotesRequestDTO notesDTO){
         NotesEntity note = new NotesEntity();
         note.setTitle(notesDTO.getTitle());
         note.setDescription(notesDTO.getDescription());
@@ -48,7 +51,8 @@ public class NotesService implements NotesServiceInterface {
         UsersEntity user = usersRepository.findById(notesDTO.getUser_id())
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + notesDTO.getUser_id()));
         note.setUser(user);
-        return notesRepository.save(note);
+        notesRepository.save(note);
+        return convertToNotesResponseDTO(note.getTitle(), note.getDescription());
     }
 
     @Override
@@ -58,18 +62,25 @@ public class NotesService implements NotesServiceInterface {
     }
 
     @Override
-    public NotesEntity updateNoteById(Integer id, NotesDTO notesDTO){
+    public NotesResponseDTO updateNoteById(Integer id, NotesRequestDTO notesDTO){
         NotesEntity note = getNoteById(id);
         note.setTitle(notesDTO.getTitle());
         note.setDescription(notesDTO.getDescription());
         notesRepository.save(note);
-        return note;
+        return convertToNotesResponseDTO(note.getTitle(), note.getDescription());
     }
 
     @Override
     public void deleteNoteById(Integer id){
         NotesEntity note = getNoteById(id);
         notesRepository.delete(note);
+    }
+
+    public NotesResponseDTO convertToNotesResponseDTO(String title, String description){
+        NotesResponseDTO note = new NotesResponseDTO();
+        note.setTitle(title);
+        note.setDescription(description);
+        return note;
     }
 
 }

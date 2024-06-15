@@ -12,7 +12,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class NotesDTO {
+public class NotesRequestDTO {
     @NotBlank(message="Title is required")
     private String title;
     
