@@ -56,14 +56,14 @@ public class NotesService implements NotesServiceInterface {
     }
 
     @Override
-    public NotesEntity getNoteById(Integer id){
-        Optional<NotesEntity> note = notesRepository.findById(id);
-        return note.orElseThrow(() -> new ResourceNotFoundException("Note not found with id " + id));
+    public NotesResponseDTO getNoteById(Integer id){
+        NotesEntity note = getNotesEntityById(id);
+        return convertToNotesResponseDTO(note.getTitle(), note.getDescription());
     }
 
     @Override
     public NotesResponseDTO updateNoteById(Integer id, NotesRequestDTO notesDTO){
-        NotesEntity note = getNoteById(id);
+        NotesEntity note = getNotesEntityById(id);
         note.setTitle(notesDTO.getTitle());
         note.setDescription(notesDTO.getDescription());
         notesRepository.save(note);
@@ -72,7 +72,7 @@ public class NotesService implements NotesServiceInterface {
 
     @Override
     public void deleteNoteById(Integer id){
-        NotesEntity note = getNoteById(id);
+        NotesEntity note = getNotesEntityById(id);
         notesRepository.delete(note);
     }
 
@@ -81,6 +81,15 @@ public class NotesService implements NotesServiceInterface {
         note.setTitle(title);
         note.setDescription(description);
         return note;
+    }
+
+    public NotesEntity getNotesEntityById(Integer id){
+        Optional<NotesEntity> note = notesRepository.findById(id);
+        if(note.isPresent()){
+            return note.get();
+        } else {
+            throw new ResourceNotFoundException("Note not found with id " + id);
+        }
     }
 
 }

@@ -9,7 +9,6 @@ import java.util.List;
 
 import com.example.javanotes.dtos.notes.NotesRequestDTO;
 import com.example.javanotes.dtos.notes.NotesResponseDTO;
-import com.example.javanotes.entities.notes.NotesEntity;
 
 /**
  *
@@ -18,7 +17,7 @@ import com.example.javanotes.entities.notes.NotesEntity;
 public interface NotesServiceInterface {
     NotesResponseDTO addNote(NotesRequestDTO notesDTO);
     List<NotesResponseDTO> getAllNotes(Integer user_id);
-    NotesEntity getNoteById(Integer id);
+    NotesResponseDTO getNoteById(Integer id);
     NotesResponseDTO updateNoteById(Integer id, NotesRequestDTO notesDTO);
     void deleteNoteById(Integer id);
 }

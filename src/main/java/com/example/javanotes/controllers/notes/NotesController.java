@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.javanotes.dtos.notes.NotesRequestDTO;
 import com.example.javanotes.dtos.notes.NotesResponseDTO;
-import com.example.javanotes.entities.notes.NotesEntity;
 import com.example.javanotes.exceptions.ResourceNotFoundException;
 import com.example.javanotes.services.notes.NotesService;
 
@@ -52,8 +51,8 @@ public class NotesController {
     }
 
     @GetMapping("/notes/{id}")
-    public ResponseEntity<NotesEntity> getNote(@PathVariable Integer id) {
-        NotesEntity note = notesService.getNoteById(id);
+    public ResponseEntity<NotesResponseDTO> getNote(@PathVariable Integer id) {
+        NotesResponseDTO note = notesService.getNoteById(id);
         return new ResponseEntity<>(note, HttpStatus.OK);
     }
     
