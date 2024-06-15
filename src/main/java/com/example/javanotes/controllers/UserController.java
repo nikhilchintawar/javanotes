@@ -1,4 +1,4 @@
-package com.example.javanotes.controllers.users;
+package com.example.javanotes.controllers;
 
 import java.util.List;
 
@@ -10,37 +10,36 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.javanotes.dtos.users.UserRequestDTO;
-import com.example.javanotes.dtos.users.UserResponseDTO;
-import com.example.javanotes.services.users.UsersService;
-
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.javanotes.entities.users.UsersEntity;
+import com.example.javanotes.dto.user.UserRequestDTO;
+import com.example.javanotes.dto.user.UserResponseDTO;
+import com.example.javanotes.entities.User;
+import com.example.javanotes.services.UserService;
 
 
 @RestController
 @RequestMapping("/api")
-public class UsersController {
-    public UsersService usersService;
+public class UserController {
+    public UserService userService;
 
     @Autowired
-    public void setUsersService(UsersService usersService){
-        this.usersService = usersService;
+    public void setUserService(UserService userService){
+        this.userService = userService;
     }
 
     @PostMapping("/users")
     public ResponseEntity<UserResponseDTO> addNote(@Valid @RequestBody UserRequestDTO usersDTO) {
         System.out.println(usersDTO);
-        UserResponseDTO user = usersService.addUser(usersDTO);
+        UserResponseDTO user = userService.addUser(usersDTO);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @GetMapping("/users/all")
-    public ResponseEntity<List<UsersEntity>> getAllUsers() {
-        List<UsersEntity> users = usersService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
     

@@ -1,4 +1,4 @@
-package com.example.javanotes.services.notes;
+package com.example.javanotes.services.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,22 +7,22 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.javanotes.dtos.notes.NotesRequestDTO;
-import com.example.javanotes.dtos.notes.NotesResponseDTO;
-import com.example.javanotes.entities.notes.NotesEntity;
-import com.example.javanotes.entities.users.UsersEntity;
+import com.example.javanotes.dto.notes.NotesRequestDTO;
+import com.example.javanotes.dto.notes.NotesResponseDTO;
+import com.example.javanotes.entities.Note;
+import com.example.javanotes.entities.User;
 import com.example.javanotes.exceptions.ResourceNotFoundException;
-import com.example.javanotes.interfaces.notes.NotesServiceInterface;
-import com.example.javanotes.repos.notes.NotesRepository;
-import com.example.javanotes.repos.users.UsersRepository;
+import com.example.javanotes.repositories.NotesRepository;
+import com.example.javanotes.repositories.UserRepository;
+import com.example.javanotes.services.NotesService;
 
 import jakarta.persistence.EntityNotFoundException;
 
 
 @Service
-public class NotesService implements NotesServiceInterface {
+public class NotesServiceImpl implements NotesService {
     private NotesRepository notesRepository;
-    private UsersRepository usersRepository;
+    private UserRepository usersRepository;
 
 
     @Autowired
@@ -31,24 +31,24 @@ public class NotesService implements NotesServiceInterface {
     }
 
     @Autowired
-    public void setUsersRepository(UsersRepository usersRepository) {
+    public void setUsersRepository(UserRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
     @Override
     public List<NotesResponseDTO> getAllNotes(Integer user_id){
-        List<NotesEntity> notes = notesRepository.findAllByUserId(user_id);
+        List<Note> notes = notesRepository.findAllByUserId(user_id);
         List<NotesResponseDTO> res = notes.stream().map(note -> convertToNotesResponseDTO(note.getTitle(), note.getDescription())).collect(Collectors.toList());
         return res;
     }
 
     @Override
     public NotesResponseDTO addNote(NotesRequestDTO notesDTO){
-        NotesEntity note = new NotesEntity();
+        Note note = new Note();
         note.setTitle(notesDTO.getTitle());
         note.setDescription(notesDTO.getDescription());
-                // Fetch the UsersEntity using the user ID from NotesDTO
-        UsersEntity user = usersRepository.findById(notesDTO.getUser_id())
+                // Fetch the Users using the user ID from NotesDTO
+        User user = usersRepository.findById(notesDTO.getUser_id())
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + notesDTO.getUser_id()));
         note.setUser(user);
         notesRepository.save(note);
@@ -57,13 +57,13 @@ public class NotesService implements NotesServiceInterface {
 
     @Override
     public NotesResponseDTO getNoteById(Integer id){
-        NotesEntity note = getNotesEntityById(id);
+        Note note = getNotesEntityById(id);
         return convertToNotesResponseDTO(note.getTitle(), note.getDescription());
     }
 
     @Override
     public NotesResponseDTO updateNoteById(Integer id, NotesRequestDTO notesDTO){
-        NotesEntity note = getNotesEntityById(id);
+        Note note = getNotesEntityById(id);
         note.setTitle(notesDTO.getTitle());
         note.setDescription(notesDTO.getDescription());
         notesRepository.save(note);
@@ -72,7 +72,7 @@ public class NotesService implements NotesServiceInterface {
 
     @Override
     public void deleteNoteById(Integer id){
-        NotesEntity note = getNotesEntityById(id);
+        Note note = getNotesEntityById(id);
         notesRepository.delete(note);
     }
 
@@ -83,8 +83,8 @@ public class NotesService implements NotesServiceInterface {
         return note;
     }
 
-    public NotesEntity getNotesEntityById(Integer id){
-        Optional<NotesEntity> note = notesRepository.findById(id);
+    public Note getNotesEntityById(Integer id){
+        Optional<Note> note = notesRepository.findById(id);
         if(note.isPresent()){
             return note.get();
         } else {

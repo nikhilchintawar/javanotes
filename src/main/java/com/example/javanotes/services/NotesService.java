@@ -3,18 +3,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package com.example.javanotes.interfaces.notes;
+package com.example.javanotes.services;
 
 import java.util.List;
 
-import com.example.javanotes.dtos.notes.NotesRequestDTO;
-import com.example.javanotes.dtos.notes.NotesResponseDTO;
+import com.example.javanotes.dto.notes.NotesRequestDTO;
+import com.example.javanotes.dto.notes.NotesResponseDTO;
 
 /**
  *
  * @author nikhilchintawar
  */
-public interface NotesServiceInterface {
+public interface NotesService {
     NotesResponseDTO addNote(NotesRequestDTO notesDTO);
     List<NotesResponseDTO> getAllNotes(Integer user_id);
     NotesResponseDTO getNoteById(Integer id);

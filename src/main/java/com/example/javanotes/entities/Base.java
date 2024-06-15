@@ -1,4 +1,4 @@
-package com.example.javanotes.core.enitities;
+package com.example.javanotes.entities;
 
 import java.util.Date;
 
@@ -18,7 +18,7 @@ import lombok.Setter;
 @MappedSuperclass
 @Getter
 @Setter
-public abstract class BaseEntity {
+public abstract class Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

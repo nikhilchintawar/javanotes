@@ -1,9 +1,7 @@
-package com.example.javanotes.entities.users;
+package com.example.javanotes.entities;
 
 import java.util.List;
 
-import com.example.javanotes.core.enitities.BaseEntity;
-import com.example.javanotes.entities.notes.NotesEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -19,7 +17,7 @@ import lombok.Setter;
 @Table(name="users")
 @Getter
 @Setter
-public class UsersEntity extends BaseEntity {
+public class User extends Base {
     @Column(name="name", length=100)
     private String name;
 
@@ -29,6 +27,6 @@ public class UsersEntity extends BaseEntity {
 
     @OneToMany(mappedBy="user", cascade=CascadeType.ALL)
     @JsonIgnoreProperties("user")
-    private List<NotesEntity> notes;
+    private List<Note> notes;
 
 }

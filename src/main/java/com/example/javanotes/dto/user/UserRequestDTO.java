@@ -1,4 +1,4 @@
-package com.example.javanotes.dtos.users;
+package com.example.javanotes.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

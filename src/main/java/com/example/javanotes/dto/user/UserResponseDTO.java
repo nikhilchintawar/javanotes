@@ -1,4 +1,4 @@
-package com.example.javanotes.dtos.users;
+package com.example.javanotes.dto.user;
 
 import lombok.Getter;
 import lombok.Setter;

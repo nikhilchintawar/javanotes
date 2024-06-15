@@ -1,7 +1,5 @@
-package com.example.javanotes.entities.notes;
+package com.example.javanotes.entities;
 
-import com.example.javanotes.core.enitities.BaseEntity;
-import com.example.javanotes.entities.users.UsersEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -18,7 +16,7 @@ import lombok.Setter;
 @Table(name="notes")
 @Getter
 @Setter
-public class NotesEntity extends BaseEntity {
+public class Note extends Base {
     @Size(max = 100, message = "Title cannot be longer than 100 characters")
     private String title;
 
@@ -30,5 +28,5 @@ public class NotesEntity extends BaseEntity {
     @JoinColumn(name="user_id")
     @NotNull(message = "User must be specified")
     @JsonIgnoreProperties("notes")
-    private UsersEntity user;
+    private User user;
 }

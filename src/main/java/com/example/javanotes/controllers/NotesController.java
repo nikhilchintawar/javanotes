@@ -1,4 +1,4 @@
-package com.example.javanotes.controllers.notes;
+package com.example.javanotes.controllers;
 
 import java.util.List;
 
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.javanotes.dtos.notes.NotesRequestDTO;
-import com.example.javanotes.dtos.notes.NotesResponseDTO;
+import com.example.javanotes.dto.notes.NotesRequestDTO;
+import com.example.javanotes.dto.notes.NotesResponseDTO;
 import com.example.javanotes.exceptions.ResourceNotFoundException;
-import com.example.javanotes.services.notes.NotesService;
+import com.example.javanotes.services.NotesService;
 
 import jakarta.validation.Valid;
 
